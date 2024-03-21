@@ -1,0 +1,9 @@
+﻿@using DxGridEditRow_HandleFocusEvents.Blazor.Server.Components
+<ProductsListComponent Data="ComponentModel.Data" ItemClick="ComponentModel.OnItemClick" ObjectSpace="ComponentModel.ObjectSpace"></ProductsListComponent>
+
+@code {
+    public static RenderFragment Create(ProductsListViewModel componentModel) =>
+    @<ProductListViewRenderer ComponentModel=@componentModel />;
+[Parameter]
+    public ProductsListViewModel ComponentModel { get; set; }
+}

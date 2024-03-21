@@ -1,0 +1,48 @@
+﻿@using DxGridEditRow_HandleFocusEvents.Module.BusinessObjects
+
+<DxGrid @ref=@Grid
+        Data="@Data"
+        EditMode="GridEditMode.EditRow"
+        EditCanceling="Grid_EditCanceling"
+        KeyFieldName="Oid"
+        CustomizeEditModel="Grid_CustomizeEditModel"
+        EditModelSaving="Grid_EditModelSaving">
+    <Columns>
+        <DxGridCommandColumn NewButtonVisible="false" width="100">
+@*             <CellDisplayTemplate>
+                <div class="d-flex justify-content-around">
+                    <a class="text-dark" @onclick="@(() => EditProduct(context) )" style="text-decoration: none;" href="javascript:void(0);"> Edit</a>                  
+                </div>
+            </CellDisplayTemplate>
+            <CellEditTemplate>
+                <div class="d-flex flex-column gap-1">
+                    <DxButton CssClass="btn btn-light btn-sm" Click="@(async () => await Grid.SaveChangesAsync())" Text="Save" />
+                    <DxButton CssClass="btn btn-light btn-sm" Click="@(async () => await Grid.CancelEditAsync())" Text="Cancel" />
+                </div>
+            </CellEditTemplate> *@
+        </DxGridCommandColumn>
+        <DxGridDataColumn TextAlignment="GridTextAlignment.Left" FieldName="@nameof(Product.Name)" MinWidth="220" />
+        <DxGridDataColumn TextAlignment="GridTextAlignment.Left" FieldName="@nameof(Product.Price)"  MinWidth="110" />
+        <DxGridDataColumn TextAlignment="GridTextAlignment.Left" FieldName="@nameof(Product.Code)"  MinWidth="110" />
+    </Columns>
+    <DataColumnCellEditTemplate>
+        @{
+            var prod = ObjectSpace.GetObject((Product)context.EditModel);
+        }
+
+            @switch (context.DataColumn.FieldName)
+            {
+                case "Name":
+                    <DxTextBox @bind-Text="@prod.Name" CssClass="w-100" @onfocusout="AutoSave"/>
+                    break;
+                case "Price":
+                <DxMaskedInput @bind-Value="@prod.Price" Mask="@(NumericMask.RealNumber)" CssClass="w-100" @onfocusout="AutoSave" />
+                    break;
+                case "Code":
+                <DxTextBox @bind-Text="@prod.Code" CssClass="w-100" @onfocusout="AutoSave" />
+                    break;
+            }
+
+    </DataColumnCellEditTemplate>
+</DxGrid>
+
